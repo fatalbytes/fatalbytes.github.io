@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fatal Bytes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet"  type="text/css" href="assets/style/index.css">
+</head>
+<body>
+  <div class="scanlines"></div>
+
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <a href="/index.html" class="logo">
+          <span class="logo-accent">&lt;</span>fatalBytes<span class="logo-accent">/&gt;</span>
+        </a>
+        <nav>
+          <a href="#posts">Posts</a>
+          <a href="/about.html" class="about">About Owner</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>
+          <span class="glitch-text" data-text="Fatal Bytes" id="hero-title">Fatal Bytes</span>
+        </h1>
+        <p class="hero-subtitle">Because insecurity is not a bug, it is a consequence.</p>
+      </div>
+    </section>
+
+    <section class="filters">
+      <div class="container">
+        <div class="filter-group">
+          <span class="filter-label">Filter by Year</span>
+          <div class="filter-buttons" id="year-filters">
+           
+          </div>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Filter by Topic</span>
+          <div class="filter-buttons" id="topic-filters">
+           
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="posts-section" id="posts">
+      <div class="container">
+        <p class="posts-count" id="posts-count"></p>
+        <div class="posts-grid" id="posts-grid"></div>
+        <div class="empty-state" id="empty-state">
+          <h3><strong>Comming Soon...</strong></h3>
+      
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Fatal Bytes. Built with raw HTML, CSS & JS.</p>
+    </div>
+  </footer>
+
+  <script src="assets/scripts/index.js">
+  </script>
+</body>
+</html>
