@@ -56,7 +56,7 @@
 <br><br>
           <h2>Disclaimer</h2><br>
           <p>
-            Disclaimer: The following content is for educational purposes only, the author does not condone illegal behavior or the irresponsible use of this information. The primary purpuse is to teach how this type of vulnerabilities can happen and how to secure systems against them. Most jurisdictions carry severe legal penalties for cybercrime. The author assumes no liability for any illegal actions taken by individuals based on the information provided herein.
+            Disclaimer: The following content is for educational purposes only, the author does not condone illegal behavior or the irresponsible use of this information. The primary purpuse is to teach how this type of vulnerabilities can happen and how to secure systems against them. Most jurisdictions carry severe legal penalties for cybercrime. The author assumes no liability for any illegal actions taken by individuals based on the information provided here.
           </p>
 
           <br><br>
@@ -81,18 +81,18 @@ Subdomain Takeover is a type of cyberattack in which a hacker takes over a compa
 
 <h2>Fingerprinting & CNAME Analysis</h2>
 <p>
-Once you have your subdomains list, it's time to analyze the DNS architecture. Check for a CNAME footprint pointing to cloud providers. While this can be done manually using commands as dig, we can also automatizate this process using high-concurrency tools like <a src="https://github.com/haccer/subjack">Subjack</a></p>
+Once you have your subdomains list, it's time to analyze the DNS architecture. Check for a CNAME footprint pointing to cloud providers. While this can be done manually using commands as dig, we can also automatizate this process using high-concurrency tools like <a src="https://github.com/haccer/subjack">Subjack</a>.</p>
 <h2>Executing the Takeover</h2>
 <p>If a vulnerability is confirmed, we can log into the respective cloud provider platform <strong>(e.g., AWS, Github, Heroku)</strong> and deploy a new project with the exact identifier specified in the target's dangling CNAME record. Doing all this, we can take full control of the subdomain.</p>
 
           <h2>Proof of Concept (PoC) Laboratory</h2>
 
           <p>
-Testing this vulnerability in live production can be really dangerous and unethical. To safely visualize of this mechanism, we can build a local enviroment using Docker containers. You can download the complete lab in this repository: <a src="https://github.com/j4f3th/Subdomain-Takeover-Demo">https://github.com/j4f3th/Subdomain-Takeover-Demo</a>
+Testing this vulnerability in live production can be really dangerous and unethical. To safely visualize of this mechanism, we can build a local enviroment using Docker containers. You can download the complete lab in this repository: <a src="https://github.com/j4f3th/Subdomain-Takeover-Demo">https://github.com/j4f3th/Subdomain-Takeover-Demo</a>.
           </p>
 <h2>Phase 1: Deploying the Architecture</h2>
-    <p>We spin up our local infrastructure, we will get up a custom DNS server and a legitimate third-party application service in HTTP</p>
-    <p>Next, we inspect the DNS records for our target <strong>app.company.local</strong></p>
+    <p>We spin up our local infrastructure, we will get up a custom DNS server and a legitimate third-party application service in HTTP.</p>
+    <p>Next, we inspect the DNS records for our target <strong>app.company.local</strong>.</p>
           
     
     
