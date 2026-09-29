@@ -64,7 +64,7 @@
           <h2>What is Subdomain takeover</h2>
 <br>
           <p>
-Subdomain Takeover is a type of cyberattack in which a hacker takes over a company's subdomain. This can happen if there is a DNS record that is pointing to a third-party service (such as Amazon Web Services or GitHub) that has either been deleted, abandoned, deprovisioned or abandoned., this will result in what is known as a "dangling" CNAME record</p>
+Subdomain Takeover is a type of cyberattack in which a hacker takes over a company's subdomain. This can happen if there is a DNS record that is pointing to a third-party service (such as Amazon Web Services or GitHub) that has either been deleted, abandoned, deprovisioned or abandoned., this will result in what is known as a "dangling" CNAME record.</p>
 
         <p>DNS records and third-party platforms are stored separately. This means if you delete a service from a third-party platform, your DNS record will remain unchanged. Therefore, an attacker can then register that unused subdomain with the third-party platform, and because your DNS record is pointing to that same subdomain, any traffic sent to it will be secretly directed to the same subdomain.</p>
         
@@ -74,7 +74,7 @@ Subdomain Takeover is a type of cyberattack in which a hacker takes over a compa
           </figure>
 
         <h2>Attack Lifecycle</h2>
-        <br><p>In a professional red teaming or bug bounty scenario, a security researcher can typically do the following steps to indentify and exploit the dangling records</p>
+        <br><p>In a professional red teaming or bug bounty scenario, a security researcher can typically do the following steps to indentify and exploit the dangling records.</p>
      
 <h2>subdomain Recon</h2>
 <p>First, we need to map the target's surface to identify many subdomains as possible. Security researchers often utilizes tools <a src="https://subdomainfinder.c99.nl/">C99 Subdomain Finder</a> to discover valid subdomains and filter for the not resolved to an active IP ones.</p>
@@ -92,7 +92,7 @@ Testing this vulnerability in live production can be really dangerous and unethi
           </p>
 <h2>Phase 1: Deploying the Architecture</h2>
     <p>We spin up our local infrastructure, we will get up a custom DNS server and a legitimate third-party application service in HTTP.</p>
-    <p>Next, we inspect the DNS records for our target <strong>app.company.local</strong>.</p>
+    <p>Next, we inspect the DNS records for our target <strong>app.company.local</strong>:</p>
           
     
     
