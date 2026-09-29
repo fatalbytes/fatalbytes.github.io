@@ -6,7 +6,6 @@
   <meta name="description" content="Blog about IT, Security, and more.">
   <meta name="author" content="ss4tan">
   <meta name="image" content="https://fatalbytes.github.io/assets/img/preview.png">
-  
 
   <title>Fatal Bytes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +24,7 @@
         </a>
         <nav>
           <a href="/#posts">Posts</a>
-           <a href="/cv" class="about">CV</a>
+          <a href="/cv" class="about">CV</a>
         </nav>
       </div>
     </div>
@@ -41,18 +40,22 @@
       </div>
     </section>
 
-    <section class="filters">
+     <section class="filters">
       <div class="container">
         <div class="filter-group">
           <span class="filter-label">Filter by Year</span>
           <div class="filter-buttons" id="year-filters">
-           
+            <button class="filter-btn active" data-filter="all" data-type="year">All Years</button>
+            <button class="filter-btn" data-filter="2026" data-type="year">2026</button>
+
+
           </div>
         </div>
         <div class="filter-group">
           <span class="filter-label">Filter by Topic</span>
           <div class="filter-buttons" id="topic-filters">
-           
+            <button class="filter-btn active" data-filter="all" data-type="topic">All Topics</button>
+            <button class="filter-btn" data-filter="cloud" data-type="topic">cloud</button>
           </div>
         </div>
       </div>
@@ -60,11 +63,29 @@
 
     <section class="posts-section" id="posts">
       <div class="container">
-        <p class="posts-count" id="posts-count"></p>
-        <div class="posts-grid" id="posts-grid"></div>
-        <div class="empty-state" id="empty-state">
-          <h3><strong>Comming Soon...</strong></h3>
+        <div class="posts-grid" id="posts-grid">
+          
       
+         
+
+          <a href="http://127.0.0.1:8000/posts/2026/subdomaintakeover/" class="post-card" data-year="2026" data-topic="cloud">
+            <div class="post-meta">
+              <span class="post-tag year">2026</span>
+              <span class="post-tag topic">cloud</span>
+              <span class="post-tag topic">DNS</span>
+              <span class="post-tag topic">subdomain takeover</span>
+            </div>
+            <h2 class="post-title" data-final-text="The Broken Asset Lifecycle: The Hidden Risk of Subdomain Takeover">The Broken Asset Lifecycle: The Hidden Risk of Subdomain Takeover</h2>
+            <p class="post-excerpt">How an attacker can hijack your domain with just a broken asset in your cloud?</p>
+            <time class="post-date">Sep 29, 2026</time>
+          </a>
+
+
+
+        </div>
+        <div class="empty-state" id="empty-state">
+          <h3>No posts found</h3>
+          <p>Try adjusting your filters to find what you're looking for.</p>
         </div>
       </div>
     </section>
@@ -72,12 +93,155 @@
 
   <footer>
     <div class="container">
-      <p>&copy; 2026 Fatal Bytes.</p>
+      <p>&copy; 2026 Fatal Bytes</p>
     </div>
   </footer>
 
-  <script src="/assets/scripts/index.js">
-  </script>
+  <script>
 
+    const allowedYears = ['all', '2026'];
+    const allowedTopics = ['all', 'cloud'];
+
+ 
+    let currentFilters = {
+      year: 'all',
+      topic: 'all'
+    };
+
+    class GlitchText {
+      constructor(element, finalText) {
+        this.element = element;
+        this.finalText = finalText;
+        this.chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+        this.iterations = 0;
+      }
+
+      animate() {
+        const interval = setInterval(() => {
+          this.element.textContent = this.finalText
+            .split('')
+            .map((char, index) => {
+              if (index < this.iterations) {
+                return this.finalText[index];
+              }
+              if (char === ' ') return ' ';
+              return this.chars[Math.floor(Math.random() * this.chars.length)];
+            })
+            .join('');
+
+          if (this.iterations >= this.finalText.length) {
+            clearInterval(interval);
+            this.element.textContent = this.finalText;
+            this.element.classList.add('active');
+            this.element.setAttribute('data-text', this.finalText);
+            
+            setTimeout(() => {
+              this.element.classList.remove('active');
+            }, 1500);
+          }
+
+          this.iterations += 1/3;
+        }, 30);
+      }
+    }
+
+    function animatePostTitle(element, finalText) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let iterations = 0;
+      
+      const interval = setInterval(() => {
+        element.textContent = finalText
+          .split('')
+          .map((char, index) => {
+            if (index < iterations) {
+              return finalText[index];
+            }
+            if (char === ' ') return ' ';
+            return chars[Math.floor(Math.random() * chars.length)];
+          })
+          .join('');
+
+        if (iterations >= finalText.length) {
+          clearInterval(interval);
+          element.textContent = finalText;
+        }
+
+        iterations += 1/2;
+      }, 25);
+    }
+
+    
+    function filterPosts() {
+      const posts = document.querySelectorAll('.post-card');
+      const emptyState = document.getElementById('empty-state');
+      let visibleCount = 0;
+
+      posts.forEach(post => {
+        const postYear = post.getAttribute('data-year');
+        const postTopic = post.getAttribute('data-topic');
+
+        const yearMatch = currentFilters.year === 'all' || postYear === currentFilters.year;
+        const topicMatch = currentFilters.topic === 'all' || postTopic === currentFilters.topic;
+
+        if (yearMatch && topicMatch) {
+          post.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          post.classList.add('hidden');
+        }
+      });
+
+    
+      if (visibleCount === 0) {
+        emptyState.classList.add('visible');
+      } else {
+        emptyState.classList.remove('visible');
+      }
+    }
+
+    function validateFilter(value, allowedValues) {
+      if (typeof value !== 'string') return 'all';
+      const sanitized = value.toLowerCase().trim();
+      return allowedValues.includes(sanitized) ? sanitized : 'all';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Animate hero title
+      const heroTitle = document.getElementById('hero-title');
+      if (heroTitle) {
+        const glitch = new GlitchText(heroTitle, 'Fatal Bytes');
+        glitch.animate();
+      }
+
+      const postTitles = document.querySelectorAll('.post-title[data-final-text]');
+      postTitles.forEach((title, index) => {
+        const finalText = title.getAttribute('data-final-text');
+        setTimeout(() => {
+          animatePostTitle(title, finalText);
+        }, index * 100);
+      });
+
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const filterType = this.getAttribute('data-type');
+          const filterValue = this.getAttribute('data-filter');
+
+          
+          const allowedValues = filterType === 'year' ? allowedYears : allowedTopics;
+          const validatedValue = validateFilter(filterValue, allowedValues);
+
+          const siblings = this.parentElement.querySelectorAll('.filter-btn');
+          siblings.forEach(s => s.classList.remove('active'));
+          this.classList.add('active');
+
+          currentFilters[filterType] = validatedValue;
+
+          filterPosts();
+        });
+      });
+    });
+  </script>
 </body>
 </html>
+

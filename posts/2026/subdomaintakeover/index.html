@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Broken Asset Lifecycle | Fatal Bytes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet"  type="text/css" href="/assets/style/post.css">
+</head>
+<body>
+  <div class="scanlines"></div>
+  <header>
+    <div class="header-content">
+      <a href="/index.html" class="logo">
+        <span class="logo-accent">&lt;</span>blog<span class="logo-accent">/&gt;</span>
+      </a>
+      <nav>
+        <a href="/index.html">Posts</a>
+        <a href="/cv.html" class="cv-link">View CV</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <article>
+      <div class="article-header">
+        <div class="container">
+          <a href="/index.html" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back to posts
+          </a>
+          <div class="article-meta">
+            <span class="tag year">2026</span>
+            <span class="tag topic">subdomaintakeover</span>
+            <span class="tag topic">network</span>
+            <span class="tag topic">cloud</span>
+          </div>
+
+          <h1 class="article-title">
+            <span class="glitch-text" id="post-title" data-text="The Broken Asset Lifecycle: The Hidden Risk of Subdomain Takeover">The Broken Asset Lifecycle: The Hidden Risk of Subdomain Takeover</span>
+          </h1>
+
+          <time class="article-date">Sep 28, 2026 · 6 min read</time>
+        </div>
+      </div>
+
+      <div class="article-content">
+        <div class="container">
+          <p>
+         In this post we are going to explore how an attacker can <strong>hijack your DNS domain name through a simple yet critical mistake</strong>, we are going to build up a demo to understand how this vulnerability occurs, and obviously we are going to see how this <strong> your organization</strong> and how to <strong>how to secure</strong> your cloud infrastructure against this type of attack. 
+          </p>
+<br><br>
+          <h2>Disclaimer</h2><br>
+          <p>
+            Disclaimer: The following content is for educational purposes only, the author does not condone illegal behavior or the irresponsible use of this information. The primary purpuse is to teach how this type of vulnerabilities can happen and how to secure systems against them. Most jurisdictions carry severe legal penalties for cybercrime. The author assumes no liability for any illegal actions taken by individuals based on the information provided herein.
+          </p>
+
+          <br><br>
+
+          <h2>What is Subdomain takeover</h2>
+<br>
+          <p>
+Subdomain Takeover is a type of cyberattack in which a hacker takes over a company's subdomain. This can happen if there is a DNS record that is pointing to a third-party service (such as Amazon Web Services or GitHub) that has either been deleted, abandoned, deprovisioned or abandoned., this will result in what is known as a "dangling" CNAME record</p>
+
+        <p>DNS records and third-party platforms are stored separately. This means if you delete a service from a third-party platform, your DNS record will remain unchanged. Therefore, an attacker can then register that unused subdomain with the third-party platform, and because your DNS record is pointing to that same subdomain, any traffic sent to it will be secretly directed to the same subdomain.</p>
+        
+        <figure class="article-image">
+            <img src="/assets/img/posts/2026/subdomaintakeover/diagram.jpeg" alt="Diagram subdomain takeover" loading="lazy">
+            <figcaption>Subdomain Takeover Attack</figcaption>
+          </figure>
+
+        <h2>Attack Lifecycle</h2>
+        <br><p>In a professional red teaming or bug bounty scenario, a security researcher can typically do the following steps to indentify and exploit the dangling records</p>
+     
+<h2>subdomain Recon</h2>
+<p>First, we need to map the target's surface to identify many subdomains as possible. Security researchers often utilizes tools <a src="https://subdomainfinder.c99.nl/">C99 Subdomain Finder</a> to discover valid subdomains and filter for the not resolved to an active IP ones.</p>
+
+<h2>Fingerprinting & CNAME Analysis</h2>
+<p>
+Once you have your subdomains list, it's time to analyze the DNS architecture. Check for a CNAME footprint pointing to cloud providers. While this can be done manually using commands as dig, we can also automatizate this process using high-concurrency tools like <a src="https://github.com/haccer/subjack">Subjack</a></p>
+<h2>Executing the Takeover</h2>
+<p>If a vulnerability is confirmed, we can log into the respective cloud provider platform <strong>(e.g., AWS, Github, Heroku)</strong> and deploy a new project with the exact identifier specified in the target's dangling CNAME record. Doing all this, we can take full control of the subdomain.</p>
+
+          <h2>Proof of Concept (PoC) Laboratory</h2>
+
+          <p>
+Testing this vulnerability in live production can be really dangerous and unethical. To safely visualize of this mechanism, we can build a local enviroment using Docker containers. You can download the complete lab in this repository: <a src="https://github.com/j4f3th/Subdomain-Takeover-Demo">https://github.com/j4f3th/Subdomain-Takeover-Demo</a>
+          </p>
+<h2>Phase 1: Deploying the Architecture</h2>
+    <p>We spin up our local infrastructure, we will get up a custom DNS server and a legitimate third-party application service in HTTP</p>
+    <p>Next, we inspect the DNS records for our target <strong>app.company.local</strong></p>
+          
+    
+    
+    <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-language bash">bash</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <pre><code>
+<span>dig @172.20.0.2 app.company.local</span>
+</code></pre>
+</div>
+          <div>
+        <figure class="article-image">
+            <img src="/assets/img/posts/2026/subdomaintakeover/records1.png" alt="output command" loading="lazy">
+            <figcaption>DNS Records</figcaption>
+          </figure>
+          </div>
+          <br>
+          <p>The query confirms that our target points to a third-party service via a CNAME record, If we send a HTTP request with curl, we can observe the normal behavior of the application:</p>
+
+             <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-language bash">bash</span>
+              <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <pre><code>
+<span>curl -s -H "Host: app.company.local" http://172.20.0.3 | html2text</span>
+</code></pre>
+</div>
+          <div>
+        <figure class="article-image">
+            <img src="/assets/img/posts/2026/subdomaintakeover/curl1.png" alt="output command" loading="lazy">
+            <figcaption>HTTP Request</figcaption>
+          </figure>
+          </div>
+
+               <div class="info-box">
+            <div class="info-box-title">Note</div>
+            <p>html2text is a command-line command that strips the HTML tags to clean raw text in the terminal.</p>
+          </div>
+
+
+          <h2>Phase 2: Simulating the Dangling Record</h2>
+          <p>Now let's simulate an decomission from the third-party service without a cleaning up in the DNS zone file. We will tear down the third-party application.</p>
+          <p>If we attempt to reach the application, the service will fail to respond because the backend infraestructure is unreachable, however the DNS architecture still actively points to it:</p>
+
+                              <div>
+        <figure class="article-image">
+            <img src="/assets/img/posts/2026/subdomaintakeover/curl_vuln.png" alt="output command" loading="lazy">
+            <figcaption>No backend response</figcaption>
+          </figure>
+          </div>
+                    <div>
+        <figure class="article-image">
+            <img src="/assets/img/posts/2026/subdomaintakeover/dangling.png" alt="output command" loading="lazy">
+            <figcaption>Dangling CNAME</figcaption>
+          </figure>
+          </div>
+
+         <h2>Phase 3: The Attacker Takeover</h2>
+         <p>At this point, an attacker raise up a malicious container configured to claim the vacant of third-service.local. Since the original CNAME was never deleted,  any user visiting app.company.local is now seamlessly served to the attacker space, now the attacker can distribute malware, harvest session cookies, lauch phishing campaigns, or even deface the domain:</p>
+
+                             <div>
+        <figure class="article-image">
+            <img src="/assets/img/posts/2026/subdomaintakeover/attcked.png" alt="output command" loading="lazy">
+            <figcaption>Subdomain Takeover</figcaption>
+          </figure>
+          </div>
+
+          <h2>Mitigations and Preventative Strategies</h2>
+          <p>Remediating subdomain takeovers requires a good synchronization between asset lifecycle managements and DNS administrations, Organization should improve the following aspects:</p>
+          <br>
+          <p><strong>1. Strict De-provisioning Workflows</strong>:Enforce a strict "DNS-First" decommisioning policy before any cloud bucked, web app, external service is deleted from a provider.</p>
+          <p><strong>2. Dynamic Network Assignment</strong>:Avoid hardcoded configurations for dynamic microservices. Instead. leverage internal proxy headers, use a managed API gateways, or a dynamic service mesh registries to route traffic.</p>
+          <p><strong>3. Automated Asset Auditing</strong>:Implement in your infrastructure a continuous routine scan which check the organization's inventory for dangling CNAME records, when anomalies occur like an external cloud enpoint returning 404 error, the scanner will warn you and your organization.</p>
+
+          <h2>Conclusion</h2>
+          <p>Subdomain takeovers represent a critical flaw born from broken asset lifecycles rather than complex software bugs. The danger is amplified because the malicious content is recieved from a trusted domain name, While the exploit mechanism is straightfoward, mainteining a healthy visibility and automated auditing over your external DNS recors is the best way to eliminate the risk.</p>
+   
+        </div>
+      </div>
+
+      <div class="article-footer">
+        <div class="container">
+          <div class="author-box">
+            <div class="author-avatar">JP</div>
+            <div class="author-info">
+              <h4>Jafeth Perez</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Fatal Bytes</p>
+    </div>
+  </footer>
+
+  <script src="/scripts/index.js"></script>
+</body>
+</html>
+
